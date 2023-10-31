@@ -74,7 +74,7 @@ def SavePloat_Voxels(voxels, path, iteration):
 
 class ShapeNetDataset(data.Dataset):
 
-    def __init__(self, root):
+    def __init__(self, root, params):
         
         self.root = root
         self.listdir = os.listdir(self.root)
@@ -82,14 +82,15 @@ class ShapeNetDataset(data.Dataset):
         # print (len(self.listdir)) # 10668
 
         data_size = len(self.listdir)
-#        self.listdir = self.listdir[0:int(data_size*0.7)]
+        # self.listdir = self.listdir[0:int(data_size*0.7)]
         self.listdir = self.listdir[0:int(data_size)]
+        self.cube_len = params.cube_len
         
         print ('data_size =', len(self.listdir)) # train: 10668-1000=9668
 
     def __getitem__(self, index):
         with open(self.root + self.listdir[index], "rb") as f:
-            volume = np.asarray(getVoxelFromMat(f, params.cube_len), dtype=np.float32)
+            volume = np.asarray(getVoxelFromMat(f, self.cube_len), dtype=np.float32)
             # print (volume.shape)
         return torch.FloatTensor(volume)
 
