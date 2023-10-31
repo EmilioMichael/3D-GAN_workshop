@@ -10,9 +10,6 @@ import scipy.ndimage as nd
 import scipy.io as io
 import matplotlib
 
-if params.device.type != 'cpu':
-    matplotlib.use('Agg')
-
 import matplotlib.pyplot as plt
 import skimage.measure as sk
 from mpl_toolkits import mplot3d
@@ -23,6 +20,9 @@ from torch.autograd import Variable
 import torch
 import os
 import pickle
+
+if torch.device('cuda' if torch.cuda.is_available() else 'cpu') != 'cpu':
+    matplotlib.use('Agg')
 
 
 
