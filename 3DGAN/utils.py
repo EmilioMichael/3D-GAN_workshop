@@ -75,8 +75,7 @@ def SavePloat_Voxels(voxels, path, iteration):
 
 class ShapeNetDataset(data.Dataset):
 
-    def __init__(self, root, args, train_or_val="train"):
-        
+    def __init__(self, root):
         
         self.root = root
         self.listdir = os.listdir(self.root)
@@ -88,7 +87,6 @@ class ShapeNetDataset(data.Dataset):
         self.listdir = self.listdir[0:int(data_size)]
         
         print ('data_size =', len(self.listdir)) # train: 10668-1000=9668
-        self.args = args
 
     def __getitem__(self, index):
         with open(self.root + self.listdir[index], "rb") as f:
@@ -100,7 +98,7 @@ class ShapeNetDataset(data.Dataset):
         return len(self.listdir)
 
 
-def generateZ(args, batch):
+def generateZ(batch):
 
     if params.z_dis == "norm":
         Z = torch.Tensor(batch, params.z_dim).normal_(0, 0.33).to(params.device)
@@ -110,3 +108,27 @@ def generateZ(args, batch):
         print("z_dist is not normal or uniform")
 
     return Z
+
+
+def save_train_log(writer, loss_D, loss_G, itr):
+    scalar_info = {}
+    for key, value in loss_G.items():
+        scalar_info['train_loss_G/' + key] = value
+
+    for key, value in loss_D.items():
+        scalar_info['train_loss_D/' + key] = value
+
+    for tag, value in scalar_info.items():
+        writer.add_scalar(tag, value, itr)
+
+
+def save_val_log(writer, loss_D, loss_G, itr):
+    scalar_info = {}
+    for key, value in loss_G.items():
+        scalar_info['val_loss_G/' + key] = value
+
+    for key, value in loss_D.items():
+        scalar_info['val_loss_D/' + key] = value
+
+    for tag, value in scalar_info.items():
+        writer.add_scalar(tag, value, itr)
