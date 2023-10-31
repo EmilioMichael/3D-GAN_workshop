@@ -98,7 +98,7 @@ class ShapeNetDataset(data.Dataset):
         return len(self.listdir)
 
 
-def generateZ(batch):
+def generateZ(batch, params):
 
     if params.z_dis == "norm":
         Z = torch.Tensor(batch, params.z_dim).normal_(0, 0.33).to(params.device)
