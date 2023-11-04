@@ -20,6 +20,8 @@ from torch.autograd import Variable
 import torch
 import os
 import pickle
+import plotly.express as px
+import pandas as pd
 
 if torch.device('cuda' if torch.cuda.is_available() else 'cpu') != 'cpu':
     matplotlib.use('Agg')
@@ -132,3 +134,36 @@ def save_val_log(writer, loss_D, loss_G, itr):
 
     for tag, value in scalar_info.items():
         writer.add_scalar(tag, value, itr)
+
+def Plot_3D_Tensor(tensor_data, opacity=0.7, color='red'):
+
+    # Get the shape of the tensor
+    shape = tensor_data.shape
+    n_x, n_y, n_z = shape
+
+    # Create lists for x, y, and z coordinates
+    x_coords = []
+    y_coords = []
+    z_coords = []
+
+    for i in range(n_x):
+        for j in range(n_y):
+            for k in range(n_z):
+                if tensor_data[i, j, k] > 0:
+                    x_coords.append(i)
+                    y_coords.append(j)
+                    z_coords.append(k)
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        'X': x_coords,
+        'Y': y_coords,
+        'Z': z_coords,
+    })
+
+
+    fig = px.scatter_3d(df, x='X', y='Y', z='Z', opacity=opacity, color_discrete_sequence=[color])
+
+    # tight layout
+    fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
+    fig.show()  
