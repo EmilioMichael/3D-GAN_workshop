@@ -136,7 +136,7 @@ def save_val_log(writer, loss_D, loss_G, itr):
     for tag, value in scalar_info.items():
         writer.add_scalar(tag, value, itr)
 
-def Plot_3D_Tensor(tensor_data, threshold=0.5, opacity=0.7, color='red'):
+def Plot_Save_3D_Tensor(tensor_data, model_saved_path, name, plot=False, save=True, threshold=0.5, opacity=0.7, color='red'):
 
     # Get the shape of the tensor
     shape = tensor_data.shape
@@ -165,8 +165,17 @@ def Plot_3D_Tensor(tensor_data, threshold=0.5, opacity=0.7, color='red'):
         'Z': z_coords,
     })
 
-    fig = px.scatter_3d(df, x='X', y='Y', z='Z', opacity=opacity, color_discrete_sequence=[color])
+    if plot:
+        fig = px.scatter_3d(df, x='X', y='Y', z='Z', opacity=opacity, color_discrete_sequence=[color])
+        # tight layout
+        fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
+        fig.show()  
 
-    # tight layout
-    fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
-    fig.show()  
+    # Define the PLY file structure
+    vertex = [(x, y, z) for x, y, z in zip(df['x'], df['y'], df['z'])]
+    plydata = PlyData([PlyElement.describe(vertex, 'vertex')])
+
+    # Save the PLY file
+    plydata.write(model_saved_path + name + '_point_cloud.ply')
+
+    return df
