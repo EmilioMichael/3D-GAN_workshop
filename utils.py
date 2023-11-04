@@ -23,6 +23,7 @@ import pickle
 
 import plotly.express as px
 import pandas as pd
+from pyntcloud import PyntCloud
 
 if torch.device('cuda' if torch.cuda.is_available() else 'cpu') != 'cpu':
     matplotlib.use('Agg')
@@ -171,11 +172,9 @@ def Plot_Save_3D_Tensor(tensor_data, model_saved_path, name, plot=False, save=Tr
         fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
         fig.show()  
 
-    # Define the PLY file structure
-    vertex = [(x, y, z) for x, y, z in zip(df['X'], df['Y'], df['Z'])]
-    plydata = PlyData([PlyElement.describe(vertex, 'vertex')])
-
-    # Save the PLY file
-    plydata.write(model_saved_path + name + '_point_cloud.ply')
+   # Create a PyntCloud object from the DataFrame
+    cloud = PyntCloud(df)
+    # Save the point cloud as a PLY file
+    cloud.to_file(model_saved_path + '/' + name + '_point_cloud.ply')
 
     return df
