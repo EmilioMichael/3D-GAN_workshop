@@ -172,7 +172,7 @@ def Plot_Save_3D_Tensor(tensor_data, model_saved_path, name, plot=False, save=Tr
         fig.show()  
 
     # Define the PLY file structure
-    vertex = [(x, y, z) for x, y, z in zip(df['x'], df['y'], df['z'])]
+    vertex = [(x, y, z) for x, y, z in zip(df['X'], df['Y'], df['Z'])]
     plydata = PlyData([PlyElement.describe(vertex, 'vertex')])
 
     # Save the PLY file
