@@ -20,6 +20,7 @@ from torch.autograd import Variable
 import torch
 import os
 import pickle
+
 import plotly.express as px
 import pandas as pd
 
@@ -135,11 +136,14 @@ def save_val_log(writer, loss_D, loss_G, itr):
     for tag, value in scalar_info.items():
         writer.add_scalar(tag, value, itr)
 
-def Plot_3D_Tensor(tensor_data, opacity=0.7, color='red'):
+def Plot_3D_Tensor(tensor_data, threshold=0.5, opacity=0.7, color='red'):
 
     # Get the shape of the tensor
     shape = tensor_data.shape
     n_x, n_y, n_z = shape
+
+    # use threshold to filter the value
+    tensor_data[tensor_data < threshold] = 0
 
     # Create lists for x, y, and z coordinates
     x_coords = []
@@ -160,7 +164,6 @@ def Plot_3D_Tensor(tensor_data, opacity=0.7, color='red'):
         'Y': y_coords,
         'Z': z_coords,
     })
-
 
     fig = px.scatter_3d(df, x='X', y='Y', z='Z', opacity=opacity, color_discrete_sequence=[color])
 
