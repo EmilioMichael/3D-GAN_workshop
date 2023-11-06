@@ -161,13 +161,13 @@ def Plot_Save_3D_Tensor(tensor_data, model_saved_path, name, plot=False, save=Tr
 
     # Create a DataFrame
     df = pd.DataFrame({
-        'X': x_coords,
-        'Y': y_coords,
-        'Z': z_coords,
+        'x': x_coords,
+        'y': y_coords,
+        'z: z_coords,
     })
 
     if plot:
-        fig = px.scatter_3d(df, x='X', y='Y', z='Z', opacity=opacity, color_discrete_sequence=[color])
+        fig = px.scatter_3d(df, x='x', y='y', z='z', opacity=opacity, color_discrete_sequence=[color])
         # tight layout
         fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
         fig.show()  
