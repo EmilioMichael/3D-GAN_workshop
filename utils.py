@@ -163,7 +163,7 @@ def Plot_Save_3D_Tensor(tensor_data, model_saved_path, name, plot=False, save=Tr
     df = pd.DataFrame({
         'x': x_coords,
         'y': y_coords,
-        'z: z_coords,
+        'z': z_coords,
     })
 
     if plot:
